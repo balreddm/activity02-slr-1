@@ -32,7 +32,7 @@ library(tidymodels)
     ## ✖ dplyr::lag()      masks stats::lag()
     ## ✖ yardstick::spec() masks readr::spec()
     ## ✖ recipes::step()   masks stats::step()
-    ## • Dig deeper into tidy modeling with R at https://www.tmwr.org
+    ## • Search for functions across packages at https://www.tidymodels.org/find/
 
 ``` r
 hfi = readr::read_csv("https://www.openintro.org/data/csv/hfi.csv")
@@ -113,3 +113,47 @@ ggplot(data = hfi_2016, aes(x = pf_expression_control, y = pf_score)) +
     ## `geom_smooth()` using formula 'y ~ x'
 
 ![](activity02-day01_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+``` r
+m1 <- lm(pf_score ~ pf_expression_control, data = hfi_2016)
+tidy(m1)
+```
+
+    ## # A tibble: 2 × 5
+    ##   term                  estimate std.error statistic  p.value
+    ##   <chr>                    <dbl>     <dbl>     <dbl>    <dbl>
+    ## 1 (Intercept)              4.28     0.149       28.8 4.23e-65
+    ## 2 pf_expression_control    0.542    0.0271      20.0 2.31e-45
+
+``` r
+glance(m1)
+```
+
+    ## # A tibble: 1 × 12
+    ##   r.squared adj.r.squa…¹ sigma stati…²  p.value    df logLik   AIC   BIC devia…³
+    ##       <dbl>        <dbl> <dbl>   <dbl>    <dbl> <dbl>  <dbl> <dbl> <dbl>   <dbl>
+    ## 1     0.714        0.712 0.799    400. 2.31e-45     1  -193.  391.  400.    102.
+    ## # … with 2 more variables: df.residual <int>, nobs <int>, and abbreviated
+    ## #   variable names ¹​adj.r.squared, ²​statistic, ³​deviance
+
+``` r
+m1_aug <- augment(m1)
+```
+
+``` r
+ggplot(data = m1_aug, aes(x = .fitted, y = .resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
+  xlab("Fitted values") +
+  ylab("Residuals")
+```
+
+![](activity02-day01_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+
+``` r
+ggplot(data = m1_aug, aes(x = .resid)) +
+  geom_histogram(binwidth = 0.25) +
+  xlab("Residuals")
+```
+
+![](activity02-day01_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->

@@ -48,4 +48,40 @@ ggplot(data = hfi_2016, aes(x = pf_expression_control, y = pf_score)) +
 
 ```
 
+```{r}
+m1 <- lm(pf_score ~ pf_expression_control, data = hfi_2016)
+tidy(m1)
+```
+
+```{r}
+glance(m1)
+```
+```{r}
+m1_aug <- augment(m1)
+```
+
+```{r}
+ggplot(data = m1_aug, aes(x = .fitted, y = .resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
+  xlab("Fitted values") +
+  ylab("Residuals")
+```
+
+
+```{r}
+ggplot(data = m1_aug, aes(x = .resid)) +
+  geom_histogram(binwidth = 0.25) +
+  xlab("Residuals")
+```
+
+
+
+
+
+
+
+
+
+
 
