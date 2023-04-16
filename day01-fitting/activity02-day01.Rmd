@@ -8,6 +8,44 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r}
+library(tidyverse)
+library(tidymodels)
+```
+
+```{r}
+hfi = readr::read_csv("https://www.openintro.org/data/csv/hfi.csv")
+head(hfi)
+```
+
+
+```{r}
+library(dplyr)
+
+# Filter the hfi data frame for the year 2016
+hfi_2016 <- hfi %>% filter(year == 2016)
 
 ```
+
+```{r}
+
+statsr::plot_ss(x = pf_expression_control, y = pf_score, data = hfi_2016)
+```
+```{r}
+library(ggplot2)
+
+# Create a scatter plot for pf_score and pf_expression_control
+ggplot(data = hfi_2016, aes(x = pf_score, y = pf_expression_control)) +
+  geom_point()
+
+```
+```{r}
+library(ggplot2)
+
+# Create a scatter plot for pf_expression_control and pf_score with a regression line
+ggplot(data = hfi_2016, aes(x = pf_expression_control, y = pf_score)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+
+```
+
 
